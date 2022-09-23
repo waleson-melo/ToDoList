@@ -8,6 +8,12 @@
         <form method="post">
             {% csrf_token %}
 
+            {% if form.complete.label %}
+            <label for="{{ form.complete.id_for_label }}">{{ form.complete.label }}:</label>
+            {% render_field form.complete class="form-check-input" %}
+            {% endif %}
+            <br>
+
             <label for="{{ form.title.id_for_label }}">{{ form.title.label }}:</label>
             {% render_field form.title class="form-control" autofocus="True" %}
 
