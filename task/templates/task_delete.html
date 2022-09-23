@@ -1,0 +1,9 @@
+<h2>Apagar Tarefa</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <p>Você deseja realmente apagar a tarefa "{{ task }}"?</p>
+
+    <input type="submit" value="Sim">
+    <input type="button" value="Não" onclick="window.location.href = '{% url 'task-list' %}'">
+</form>

@@ -1,0 +1,21 @@
+{% extends 'template_main.html' %}
+{% load widget_tweaks %}
+
+{% block main %}
+    <div class="col-md-5 mx-auto">
+        <h2 class="text-center">{{ page_name }}</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label for="{{ form.title.id_for_label }}">{{ form.title.label }}:</label>
+            {% render_field form.title class="form-control" autofocus="True" %}
+
+            <label for="{{ form.description.id_for_label }}">{{ form.description.label }}:</label>
+            {% render_field form.description class="form-control" rows="3" %}
+
+            <input type="submit" value="Salvar" class="btn btn-primary btn-sm">
+            <input type="button" value="Cancelar" onclick="window.location.href = '{% url 'task-list' %}'" class="btn btn-danger btn-sm">
+        </form>
+    </div>
+{% endblock main %}
