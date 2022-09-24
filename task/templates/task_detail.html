@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 
 {% block main %}
-    <div class="col-md-5 mx-auto">
+    <div class="col-md-5 mx-auto shadow p-3 mb-5 bg-body rounded">
         <h2 class="text-center">Detalhes da Tarefa</h2>
 
         <p class="h4"></p>
@@ -32,5 +32,8 @@
                 </tbody>
             </table>
         </div>
+
+        <a href="{% url 'task-list' %}" class="btn btn-primary btn-sm">Voltar</a>
+        <a href="{% url 'task-update' task.pk%}" class="btn btn-warning btn-sm">Editar</a>
     </div>
 {% endblock main %}

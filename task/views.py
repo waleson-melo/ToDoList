@@ -2,27 +2,47 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from task.models import Task
 
 
-class ListTasks(ListView):
+class ListTasks(LoginRequiredMixin, ListView):
     template_name = 'task_list.html'
     model = Task
     context_object_name = 'tasks'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-class DetailTask(DetailView):
+        context['tasks'] = context['tasks'].filter(user=self.request.user)
+        context['count'] = context['tasks'].filter(complete=False).count()
+
+        search_input = self.request.GET.get('pesquisa') or ''
+        if search_input:
+            context['tasks'] = context['tasks'].filter(title__startswith=search_input)
+
+        context['pesquisa'] = search_input
+
+        return context
+
+
+class DetailTask(LoginRequiredMixin, DetailView):
     template_name = 'task_detail.html'
     model = Task
     context_object_name = 'task'
 
 
-class CreateTask(CreateView):
+class CreateTask(LoginRequiredMixin, CreateView):
     template_name = 'task_form.html'
     model = Task
     fields = ['title', 'description']
     success_url = reverse_lazy('task-list')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+
+        return super(CreateTask, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(CreateTask, self).get_context_data(**kwargs)
@@ -31,7 +51,7 @@ class CreateTask(CreateView):
         return context
 
 
-class UpdateTask(UpdateView):
+class UpdateTask(LoginRequiredMixin, UpdateView):
     template_name = 'task_form.html'
     model = Task
     fields = ['title', 'description', 'complete']
@@ -44,7 +64,7 @@ class UpdateTask(UpdateView):
         return context
 
 
-class DeleteTask(DeleteView):
+class DeleteTask(LoginRequiredMixin, DeleteView):
     template_name = 'task_delete.html'
     model = Task
     context_object_name = 'task'

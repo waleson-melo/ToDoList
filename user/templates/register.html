@@ -1,0 +1,12 @@
+
+<h2>Criar Conta</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <input type="submit" value="Criar" class="btn btn-primary btn-sm">
+</form>
+
+<p>Para entrar <a href="{% url 'login' %}">click aqui.</a></p>

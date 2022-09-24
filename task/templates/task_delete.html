@@ -1,9 +1,15 @@
-<h2>Apagar Tarefa</h2>
+{% extends 'template_main.html' %}
 
-<form method="post">
-    {% csrf_token %}
-    <p>Você deseja realmente apagar a tarefa "{{ task }}"?</p>
+{% block main %}
+    <div class="col-md-5 mx-auto shadow p-3 mb-5 bg-body rounded">
+        <h2 class="text-center">Apagar Tarefa</h2>
 
-    <input type="submit" value="Sim">
-    <input type="button" value="Não" onclick="window.location.href = '{% url 'task-list' %}'">
-</form>
+        <form method="post">
+            {% csrf_token %}
+            <p>Você deseja realmente apagar a tarefa "{{ task }}"?</p>
+
+            <input type="submit" value="Sim" class="btn btn-danger btn-sm">
+            <input type="button" value="Não" onclick="window.location.href = '{% url 'task-list' %}'" class="btn btn-primary btn-sm">
+        </form>
+    </div>
+{% endblock main %}

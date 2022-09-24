@@ -1,0 +1,22 @@
+{% extends 'template_main.html' %}
+{% load widget_tweaks %}
+
+{% block main %}
+    <div class="col-md-3 mx-auto shadow p-3 mb-5 bg-body rounded">
+        <h2 class="text-center">Entrar</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label for="{{ form.username.id_for_label }}">Usuário:</label>
+            {% render_field form.username class="form-control" %}
+
+            <label for="{{ form.password.id_for_label }}">Senha:</label>
+            {% render_field form.password class="form-control" %}
+
+            <input type="submit" value="Entrar" class="btn btn-primary btn-sm">
+        </form>
+
+        <p>Para criar uma conta <a href="{% url 'register' %}">click aqui.</a></p>
+    </div>
+{% endblock main %}
