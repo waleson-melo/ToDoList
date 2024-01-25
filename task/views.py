@@ -73,6 +73,19 @@ class UpdateTask(LoginRequiredMixin, UpdateView):
     fields = ['title', 'description', 'complete']
     success_url = reverse_lazy('task-list')
 
+    def get(self, request, *args, **kwargs):
+        try:
+            task = self.get_object()
+
+            if task.user == request.user:
+                return super().get(request, *args, **kwargs)
+            else:
+                messages.add_message(request, messages.WARNING, 'A tarefa que você está procurando não foi encontrada.')
+                return redirect(reverse('task-list'))
+        except:
+            messages.error(request, 'A tarefa que você está procurando não foi encontrada.')
+            return reverse_lazy('task_list')
+
     def get_context_data(self, **kwargs):
         context = super(UpdateTask, self).get_context_data(**kwargs)
         context['page_name'] = 'Atualizar Tarefa'
