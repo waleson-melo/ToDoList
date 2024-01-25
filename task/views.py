@@ -98,3 +98,16 @@ class DeleteTask(LoginRequiredMixin, DeleteView):
     model = Task
     context_object_name = 'task'
     success_url = reverse_lazy('task-list')
+
+    def get(self, request, *args, **kwargs):
+        try:
+            task = self.get_object()
+
+            if task.user == request.user:
+                return super().get(request, *args, **kwargs)
+            else:
+                messages.add_message(request, messages.WARNING, 'Não foi possivel deletar a tarefa, pois não foi encontrada.')
+                return redirect(reverse('task-list'))
+        except:
+            messages.error(request, 'A tarefa que você está procurando não foi encontrada.')
+            return reverse_lazy('task_list')
