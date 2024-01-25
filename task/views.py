@@ -1,8 +1,11 @@
+from typing import Any
+from django.shortcuts import redirect
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 from task.models import Task
 
@@ -31,6 +34,19 @@ class DetailTask(LoginRequiredMixin, DetailView):
     template_name = 'task_detail.html'
     model = Task
     context_object_name = 'task'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            task = self.get_object()
+
+            if task.user == request.user:
+                return super().get(request, *args, **kwargs)
+            else:
+                messages.add_message(request, messages.WARNING, 'A tarefa que você está procurando não foi encontrada.')
+                return redirect(reverse('task-list'))
+        except:
+            messages.error(request, 'A tarefa que você está procurando não foi encontrada.')
+            return reverse_lazy('task_list')
 
 
 class CreateTask(LoginRequiredMixin, CreateView):
